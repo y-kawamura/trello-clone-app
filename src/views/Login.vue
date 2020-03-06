@@ -1,11 +1,92 @@
 <template>
-  <div>
-    <h1>This is an login page</h1>
-  </div>
+  <v-row align="center" justify="center" style="height: 100%;">
+    <v-card max-width="400px" width="100%" class="ma-10">
+      <v-card-title>
+        <h1 class="display-1 font-weight-thin my-2">Login</h1>
+      </v-card-title>
+      <v-card-text>
+        <v-form
+          v-model="valid"
+          ref="form"
+          lazy-validation
+        >
+          <v-text-field
+            v-model="user.username"
+            :rules="emptyRules"
+            label="User Name"
+            color="indigo darken-1"
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="user.password"
+            :rules="emptyRules"
+            type="password"
+            label="Password"
+            color="indigo darken-1"
+            required
+          ></v-text-field>
+
+          <v-btn
+            class="my-4"
+            color="indigo darken-1"
+            dark
+            @click="login"
+          >
+            Login
+          </v-btn>
+        </v-form>
+      </v-card-text>
+
+      <!-- loading -->
+      <v-overlay v-if="isLoading" opacity="0.3">
+        <v-progress-circular
+          :size="70"
+          color="indigo accent-4"
+          indeterminate
+        ></v-progress-circular>
+      </v-overlay>
+    </v-card>
+  </v-row>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
+
 export default {
   name: 'Login',
+  data() {
+    return {
+      valid: true,
+      user: {
+        username: '',
+        password: '',
+      },
+      emptyRules: [
+        (value) => !!value || 'Can not be empty',
+      ],
+    };
+  },
+  computed: {
+    ...mapState('auth', { isLoading: 'isAuthenticatePending' }),
+  },
+  methods: {
+    ...mapActions('auth', ['authenticate']),
+    login() {
+      this.$refs.form.validate();
+      if (this.valid) {
+        // login
+        this.authenticate({
+          strategy: 'local',
+          ...this.user,
+        })
+          .then(() => {
+            this.$router.push('/boards');
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    },
+  },
 };
 </script>
