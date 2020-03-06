@@ -18,7 +18,7 @@
             required
           ></v-text-field>
           <v-text-field
-            v-model="user.displayNmae"
+            v-model="user.displayName"
             :rules="emptyRules"
             label="Display Name"
             color="indigo darken-1"
@@ -87,7 +87,12 @@ export default {
 
       if (this.valid) {
         // sign up
-        console.log('sign up');
+        const { User } = this.$FeathersVuex.api;
+        const user = new User(this.user);
+        user.save()
+          .then((created) => {
+            console.log(created);
+          });
       }
     },
   },
