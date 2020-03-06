@@ -11,7 +11,7 @@
       <router-view/>
     </v-content>
     <v-footer fixed="fixed" app>
-      <span>&copy; 2020 - Made by penta🝧</span>
+      <span>&copy; 2020 - Made by penta</span>
     </v-footer>
   </v-app>
 </template>
