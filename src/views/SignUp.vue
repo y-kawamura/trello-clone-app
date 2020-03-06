@@ -50,7 +50,7 @@
             class="my-4"
             color="indigo darken-1"
             dark
-            @click="onSubmit"
+            @click="signUp"
           >
             Sign Up
           </v-btn>
@@ -61,6 +61,8 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
+
 export default {
   name: 'SignUp',
   data(vm) {
@@ -81,8 +83,16 @@ export default {
       ],
     };
   },
+  computed: {
+    ...mapState('users', ['isCreatePending']),
+    ...mapState('auth', ['isAuthenticatePending']),
+    isLoading() {
+      return this.isCreatePending || this.isAuthenticatePending;
+    },
+  },
   methods: {
-    onSubmit() {
+    ...mapActions('auth', ['authenticate']),
+    signUp() {
       this.$refs.form.validate();
 
       if (this.valid) {
@@ -90,8 +100,19 @@ export default {
         const { User } = this.$FeathersVuex.api;
         const user = new User(this.user);
         user.save()
-          .then((created) => {
-            console.log(created);
+          .then(() => {
+            // Automatically login when success
+            this.authenticate({
+              strategy: 'local',
+              username: this.user.username,
+              password: this.user.password,
+            })
+              .then(() => {
+                this.$router.push('/boards');
+              });
+          })
+          .catch((error) => {
+            console.error(error);
           });
       }
     },
