@@ -6,19 +6,20 @@
       </v-card-title>
       <v-card-text>
         <v-form
-          @submit.prevent="onSubmit()"
           v-model="valid"
           ref="form"
           lazy-validation
         >
           <v-text-field
             v-model="user.username"
+            :rules="emptyRules"
             label="User Name"
             color="indigo darken-1"
             required
           ></v-text-field>
           <v-text-field
             v-model="user.displayNmae"
+            :rules="emptyRules"
             label="Display Name"
             color="indigo darken-1"
             required
@@ -28,9 +29,9 @@
             label="User Image"
             color="indigo darken-1"
           ></v-text-field>
-
           <v-text-field
             v-model="user.password"
+            :rules="emptyRules"
             type="password"
             label="Password"
             color="indigo darken-1"
@@ -38,8 +39,9 @@
           ></v-text-field>
           <v-text-field
             v-model="user.confirmPassword"
+            :rules="confirmPasswordRules"
             type="password"
-            label="Confitm Password"
+            label="Confirm Password"
             color="indigo darken-1"
             required
           ></v-text-field>
@@ -61,7 +63,7 @@
 <script>
 export default {
   name: 'SignUp',
-  data() {
+  data(vm) {
     return {
       valid: true,
       user: {
@@ -71,11 +73,22 @@ export default {
         password: '',
         confirmPassword: '',
       },
+      emptyRules: [
+        (value) => !!value || 'Can not be empty',
+      ],
+      confirmPasswordRules: [
+        (confirmPassword) => confirmPassword === vm.user.password || 'Password must match',
+      ],
     };
   },
   methods: {
     onSubmit() {
-      console.log(this.user);
+      this.$refs.form.validate();
+
+      if (this.valid) {
+        // sign up
+        console.log('sign up');
+      }
     },
   },
 };
