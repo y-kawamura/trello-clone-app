@@ -2,7 +2,7 @@
   <v-row align="center" justify="center" style="height: 100%;">
     <v-card max-width="400px" width="100%" class="ma-10">
       <v-card-title>
-        <h1 class="display-1 font-weight-thin">Sign Up</h1>
+        <h1 class="display-1 font-weight-thin my-2">Sign Up</h1>
       </v-card-title>
       <v-card-text>
         <v-form
