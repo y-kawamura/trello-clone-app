@@ -20,6 +20,11 @@ const routes = [
     name: 'Login',
     component: () => import('../views/Login.vue'),
   },
+  {
+    path: '/boards',
+    name: 'Boards',
+    component: () => import('../views/Boards.vue'),
+  },
 ];
 
 const router = new VueRouter({
