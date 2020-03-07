@@ -8,9 +8,9 @@
       app
     >
       <v-list nav>
-        <v-list-item link>
+        <v-list-item link @click="drawer = !drawer">
           <v-list-item-content>
-            <div class="avatar" @click="drawer = !drawer">
+            <div class="avatar">
               <v-avatar color="white" size="32">
                 <img
                   src="@/assets/avatar.png"
