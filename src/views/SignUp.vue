@@ -56,21 +56,12 @@
           </v-btn>
         </v-form>
       </v-card-text>
-
-      <!-- loading -->
-      <v-overlay v-if="isLoading" opacity="0.3">
-        <v-progress-circular
-          :size="70"
-          color="indigo accent-4"
-          indeterminate
-        ></v-progress-circular>
-      </v-overlay>
     </v-card>
   </v-row>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'SignUp',
@@ -91,13 +82,6 @@ export default {
         (confirmPassword) => confirmPassword === vm.user.password || 'Password must match',
       ],
     };
-  },
-  computed: {
-    ...mapState('users', ['isCreatePending']),
-    ...mapState('auth', ['isAuthenticatePending']),
-    isLoading() {
-      return this.isCreatePending || this.isAuthenticatePending;
-    },
   },
   methods: {
     ...mapActions('auth', ['authenticate']),
