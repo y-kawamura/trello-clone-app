@@ -1,6 +1,11 @@
 <template>
   <div class="container">
-    <h1 class="font-weight-thin display-3 my-12 text-center">Trello Clone</h1>
+    <h1 class="font-weight-thin display-3 mt-12 text-center">
+      Trello Clone
+    </h1>
+    <p class="font-weight-thin display-1 my-4 text-center">
+      Vue - Feathers <span class="indigo--text text--lighten-1">.js</span>
+    </p>
     <v-btn
       :to="{ name: 'Login' }"
       class="my-6 mx-auto d-flex"
@@ -19,37 +24,11 @@
     >
       Sign Up
     </v-btn>
-
-    <!-- loading -->
-    <v-overlay v-if="isLoading" opacity="0.3">
-      <v-progress-circular
-        :size="70"
-        color="indigo accent-4"
-        indeterminate
-      ></v-progress-circular>
-    </v-overlay>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
-
 export default {
   name: 'Home',
-  computed: {
-    ...mapState('auth', { isLoading: 'isAuthenticatePending' }),
-  },
-  methods: {
-    ...mapActions('auth', ['authenticate']),
-  },
-  mounted() {
-    this.authenticate()
-      .then(() => {
-        this.$router.push('/boards');
-      })
-      .catch(() => {
-        // user is not logged in
-      });
-  },
 };
 </script>
