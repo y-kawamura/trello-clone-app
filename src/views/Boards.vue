@@ -5,10 +5,22 @@
     <v-content>
       <v-container fluid>
         <v-row>
-          <v-col cols="12" md="4">
-            <v-card link hover height="150px" dark color="cyan">
+          <v-col v-if="isBoardsLoading" cols="12" sm="6" md="4">
+            <v-card height="150px">
+              <v-card-title class="justify-center" style="height:100%;">
+                <v-progress-circular
+                  :size="60"
+                  :width="4"
+                  color="indigo"
+                  indeterminate
+                ></v-progress-circular>
+              </v-card-title>
+          </v-card>
+          </v-col>
+          <v-col cols="12" sm="6" md="4" v-for="board in boards" :key="board._id">
+            <v-card link hover height="150px" dark :color="board.background">
               <v-card-title>
-                Todo
+                {{ board.name }}
               </v-card-title>
             </v-card>
           </v-col>
@@ -16,7 +28,7 @@
           <!-- new board -->
           <v-dialog v-model="showBoardForm" width="400">
             <template v-slot:activator="{ on }">
-              <v-col cols="12" md="4">
+              <v-col cols="12" sm="6" md="4">
                 <v-card
                   v-on="on"
                   link
@@ -45,7 +57,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 import Header from '@/components/Header.vue';
 import BoardForm from '@/components/BoardForm.vue';
 
@@ -58,14 +70,19 @@ export default {
   data() {
     return {
       showBoardForm: false,
-      drawer: false,
     };
   },
   computed: {
+    ...mapState('boards', { isBoardsLoading: 'isFindPending' }),
     ...mapGetters('auth', ['user']),
+    ...mapGetters('boards', { findBoardsInStore: 'find' }),
+    boards() {
+      return this.findBoardsInStore().data;
+    },
   },
   methods: {
     ...mapActions('auth', { authLogout: 'logout' }),
+    ...mapActions('boards', { findBoards: 'find' }),
     logout() {
       this.authLogout()
         .then(() => {
@@ -75,6 +92,9 @@ export default {
           console.error(error);
         });
     },
+  },
+  created() {
+    this.findBoards({ query: {} });
   },
 };
 </script>

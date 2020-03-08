@@ -34,7 +34,7 @@
 
     <v-app-bar
       app
-      color="red lighten-1"
+      :color="color"
       dark
     >
       <v-toolbar-title class="font-italic font-weight-light px-1">
@@ -65,6 +65,12 @@ export default {
     return {
       drawer: false,
     };
+  },
+  props: {
+    color: {
+      type: String,
+      default: 'indigo',
+    },
   },
   computed: {
     ...mapGetters('auth', ['user']),
