@@ -15,7 +15,7 @@ export default {
   name: 'Loading',
   computed: {
     ...mapState('users', { userCreating: 'isCreatePending' }),
-    ...mapState('services', { serviceCreating: 'isCreatePending' }),
+    ...mapState('boards', { serviceCreating: 'isCreatePending' }),
     ...mapState('auth', ['isAuthenticatePending']),
     isLoading() {
       return this.userCreating
