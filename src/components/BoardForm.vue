@@ -22,9 +22,9 @@
               flat
               width="100"
               height="100"
-              :color="this.board.backgroundColor"
+              :color="backgroundColor"
               class="color-board"
-              :img="board.backgroundImage"
+              :img="backgroundImage"
             ></v-card>
           </v-col>
           <v-col cols="6" sm="8">
@@ -41,7 +41,7 @@
           </v-col>
         </v-row>
         <v-text-field
-          v-model="board.backgroundImage"
+          v-model="backgroundImage"
           label="Image URL"
           color="indigo"
         ></v-text-field>
@@ -61,7 +61,6 @@
             class="white--text"
             depressed
             large
-            @click="$emit('create')"
           >Add</v-btn>
         </v-card-actions>
       </v-form>
@@ -74,10 +73,11 @@ export default {
   name: 'BoardForm',
   data() {
     return {
+      backgroundColor: 'indigo',
+      backgroundImage: '',
       board: {
         name: '',
-        backgroundColor: 'indigo',
-        backgroundImage: '',
+        background: '',
       },
       colors: [
         'red',
@@ -99,12 +99,24 @@ export default {
   },
   methods: {
     createBoard() {
-      // create board
+      if (this.isValid) {
+        this.board.background = (this.backgroundImage.length !== 0)
+          ? this.backgroundImage
+          : this.backgroundColor;
 
-      this.$emit('create');
+        const { Board } = this.$FeathersVuex.api;
+        const board = new Board(this.board);
+        board.save()
+          .then(() => {
+            this.$emit('create');
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
     },
     selectColor(color) {
-      this.board.backgroundColor = color;
+      this.backgroundColor = color;
     },
   },
 };

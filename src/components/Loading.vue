@@ -14,10 +14,13 @@ import { mapState } from 'vuex';
 export default {
   name: 'Loading',
   computed: {
-    ...mapState('users', ['isCreatePending']),
+    ...mapState('users', { userCreating: 'isCreatePending' }),
+    ...mapState('services', { serviceCreating: 'isCreatePending' }),
     ...mapState('auth', ['isAuthenticatePending']),
     isLoading() {
-      return this.isCreatePending || this.isAuthenticatePending;
+      return this.userCreating
+        || this.serviceCreating
+        || this.isAuthenticatePending;
     },
   },
 };
