@@ -18,7 +18,14 @@
           </v-card>
           </v-col>
           <v-col cols="12" sm="6" md="4" v-for="board in boards" :key="board._id">
-            <v-card link hover height="150px" dark :color="board.background">
+            <v-card
+              link
+              :to="board._id"
+              hover
+              height="150px"
+              dark
+              :color="board.background"
+            >
               <v-card-title>
                 {{ board.name }}
               </v-card-title>
