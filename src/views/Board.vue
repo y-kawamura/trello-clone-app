@@ -98,7 +98,13 @@ export default {
     ...mapActions('lists', { findLists: 'find' }),
   },
   created() {
-    this.getBoardById(this.$route.params.board_id);
+    this.getBoardById(this.$route.params.board_id)
+      .catch(() => {
+        // owner id is not matched as current user id
+        // board id is not found
+        this.$router.push('/boards');
+      });
+
     this.findLists({
       query: { boardId: this.$route.params.board_id },
     });
