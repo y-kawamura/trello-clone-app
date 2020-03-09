@@ -15,7 +15,7 @@
                   indeterminate
                 ></v-progress-circular>
               </v-card-title>
-          </v-card>
+            </v-card>
           </v-col>
           <v-col cols="12" sm="6" md="4" v-for="board in boards" :key="board._id">
             <v-card
@@ -84,24 +84,24 @@ export default {
     ...mapGetters('auth', ['user']),
     ...mapGetters('boards', { findBoardsInStore: 'find' }),
     boards() {
-      return this.findBoardsInStore().data;
+      return this.findBoardsInStore({
+        query: {
+          // eslint-disable-next-line no-underscore-dangle
+          ownerId: this.user._id,
+        },
+      }).data;
     },
   },
   methods: {
-    ...mapActions('auth', { authLogout: 'logout' }),
     ...mapActions('boards', { findBoards: 'find' }),
-    logout() {
-      this.authLogout()
-        .then(() => {
-          this.$router.push('/login');
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    },
   },
   created() {
-    this.findBoards({ query: {} });
+    this.findBoards({
+      query: {
+        // eslint-disable-next-line no-underscore-dangle
+        ownerId: this.user._id,
+      },
+    });
   },
 };
 </script>
