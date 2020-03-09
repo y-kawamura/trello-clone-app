@@ -98,9 +98,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.avatar {
-  cursor: pointer;
-}
-</style>

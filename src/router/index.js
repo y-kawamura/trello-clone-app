@@ -7,6 +7,19 @@ import Home from '../views/Home.vue';
 
 Vue.use(VueRouter);
 
+const checkLogin = (next) => {
+  if (store.getters['auth/isAuthenticated']) {
+    next();
+  }
+  store.dispatch('auth/authenticate')
+    .then(() => {
+      next();
+    })
+    .catch(() => {
+      next(('/login'));
+    });
+};
+
 const routes = [
   {
     path: '/',
@@ -37,16 +50,15 @@ const routes = [
     name: 'Boards',
     component: () => import('../views/Boards.vue'),
     beforeEnter(to, from, next) {
-      if (store.getters['auth/isAuthenticated']) {
-        next();
-      }
-      store.dispatch('auth/authenticate')
-        .then(() => {
-          next();
-        })
-        .catch(() => {
-          next(('/login'));
-        });
+      checkLogin(next);
+    },
+  },
+  {
+    path: '/boards/:board_id',
+    name: 'Board',
+    component: () => import('../views/Board.vue'),
+    beforeEnter(to, from, next) {
+      checkLogin(next);
     },
   },
 ];
