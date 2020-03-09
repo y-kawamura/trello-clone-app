@@ -10,12 +10,11 @@
           outlined
           hide-details
           class="mb-1"
-          rows="1"
-          auto-grow
           dense
           flat
           :color="bodyColor"
           placeholder="Input list title..."
+          autofocus
         >
         </v-text-field>
         <v-btn type="submit" :color="headerColor" dark class="mr-1">Add</v-btn>

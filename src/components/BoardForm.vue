@@ -13,6 +13,7 @@
           color="indigo"
           solo
           flat
+          autofocus
         ></v-text-field>
 
         <p class="subtitle-1 mb-0">Choose your favorite color or image</p>
