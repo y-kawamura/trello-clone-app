@@ -15,11 +15,13 @@ export default {
   name: 'Loading',
   computed: {
     ...mapState('users', { userCreating: 'isCreatePending' }),
-    ...mapState('boards', { serviceCreating: 'isCreatePending' }),
+    ...mapState('boards', { boardCreating: 'isCreatePending' }),
+    ...mapState('boards', { boardGetting: 'isGetPending' }),
     ...mapState('auth', ['isAuthenticatePending']),
     isLoading() {
       return this.userCreating
-        || this.serviceCreating
+        || this.boardCreating
+        || this.boardGetting
         || this.isAuthenticatePending;
     },
   },
