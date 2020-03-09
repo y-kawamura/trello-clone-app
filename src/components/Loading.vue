@@ -17,11 +17,13 @@ export default {
     ...mapState('users', { userCreating: 'isCreatePending' }),
     ...mapState('boards', { boardCreating: 'isCreatePending' }),
     ...mapState('boards', { boardGetting: 'isGetPending' }),
+    ...mapState('lists', { listCreating: 'isCreatePending' }),
     ...mapState('auth', ['isAuthenticatePending']),
     isLoading() {
       return this.userCreating
         || this.boardCreating
         || this.boardGetting
+        || this.listCreating
         || this.isAuthenticatePending;
     },
   },

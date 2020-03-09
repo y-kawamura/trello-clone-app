@@ -5,8 +5,40 @@
     <v-content :class="bodyColor">
       <v-container fluid>
         <v-row>
-          <pre>{{board}}</pre>
-          <pre>{{lists}}</pre>
+          <v-col
+            cols="4"
+            v-for="list in lists"
+            :key="list._id"
+          >
+            <v-card
+              color="grey lighten-3"
+            >
+              <v-card-text class="pa-2">{{ list.name }}</v-card-text>
+            </v-card>
+          </v-col>
+
+          <!-- New list -->
+          <v-col cols="4">
+            <v-card
+              v-if="!showListForm"
+              hover
+              :color="linkColor"
+            >
+              <v-card-text
+                @click="showListForm = true"
+                class="pa-2"
+              >
+                + Add new list
+              </v-card-text>
+            </v-card>
+            <ListForm
+              v-if="showListForm"
+              :boardId="this.$route.params.board_id"
+              :background="color"
+              @create="showListForm=false"
+              @cancel="showListForm=false"
+            />
+          </v-col>
         </v-row>
       </v-container>
     </v-content>
@@ -16,11 +48,18 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import Header from '@/components/Header.vue';
+import ListForm from '@/components/ListForm.vue';
 
 export default {
   name: 'Board',
+  data() {
+    return {
+      showListForm: false,
+    };
+  },
   components: {
     Header,
+    ListForm,
   },
   computed: {
     ...mapGetters('boards', { getBoardByIdInStore: 'get' }),
@@ -41,6 +80,16 @@ export default {
     bodyColor() {
       return this.board
         ? `${this.board.background} darken-2`
+        : 'white';
+    },
+    linkColor() {
+      return this.board
+        ? `${this.board.background} lighten-3`
+        : 'white';
+    },
+    color() {
+      return this.board
+        ? `${this.board.background}`
         : 'white';
     },
   },
