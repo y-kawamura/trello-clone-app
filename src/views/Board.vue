@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <Header />
+    <Header :color="headerColor" />
 
-    <v-content>
+    <v-content :class="bodyColor">
       <v-container fluid>
         <v-row>
           <pre>{{board}}</pre>
@@ -32,6 +32,16 @@ export default {
       return this.findListsInStore({
         query: { boardId: this.$route.params.board_id },
       }).data;
+    },
+    headerColor() {
+      return this.board
+        ? `${this.board.background} darken-3`
+        : 'white';
+    },
+    bodyColor() {
+      return this.board
+        ? `${this.board.background} darken-2`
+        : 'white';
     },
   },
   methods: {
