@@ -20,7 +20,7 @@
           <v-col cols="12" sm="6" md="4" v-for="board in boards" :key="board._id">
             <v-card
               link
-              :to="board._id"
+              :to="{ name: 'Board', params: { board_id: board._id } }"
               hover
               height="150px"
               dark
