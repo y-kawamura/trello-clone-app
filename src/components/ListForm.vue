@@ -17,7 +17,7 @@
           autofocus
         >
         </v-text-field>
-        <v-btn type="submit" :color="headerColor" dark class="mr-1">Add</v-btn>
+        <v-btn type="submit" :color="headerColor" dark depressed class="mr-1">Add</v-btn>
         <v-btn :color="headerColor" outlined @click="$emit('cancel')">Close</v-btn>
       </v-form>
     </v-card-text>

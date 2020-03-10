@@ -19,6 +19,12 @@
                   {{ card.title }}
                 </v-card-text>
               </v-card>
+              <v-card-text class="pa-2">
+                <CardForm
+                  :listId="list._id"
+                  :background="color"
+                />
+              </v-card-text>
             </v-card>
           </v-col>
 
@@ -54,6 +60,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import Header from '@/components/Header.vue';
 import ListForm from '@/components/ListForm.vue';
+import CardForm from '@/components/CardForm.vue';
 
 export default {
   name: 'Board',
@@ -65,6 +72,7 @@ export default {
   components: {
     Header,
     ListForm,
+    CardForm,
   },
   computed: {
     ...mapGetters('boards', { getBoardByIdInStore: 'get' }),
