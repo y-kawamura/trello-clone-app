@@ -11,10 +11,19 @@
             :key="list._id"
           >
             <v-card
-              color="grey lighten-3"
+              :color="droppingColor(list)"
+              @dragover="setDroppingList($event, list)"
+              @dragleave="removeDroppingList()"
             >
               <v-card-text class="pa-2">{{ list.name }}</v-card-text>
-              <v-card v-for="card in cards(list)" :key="card._id" class="ma-2">
+              <v-card
+                v-for="card in cards(list)"
+                :key="card._id"
+                draggable="true"
+                @dragstart="startDraggingCard(card)"
+                @dragend="endDraggingCard()"
+                class="ma-2"
+              >
                 <v-card-text class="pa-2">
                   {{ card.title }}
                 </v-card-text>
@@ -67,6 +76,8 @@ export default {
   data() {
     return {
       showListForm: false,
+      draggingCard: null,
+      droppingList: null,
     };
   },
   components: {
@@ -112,11 +123,36 @@ export default {
         ? `${this.board.background}`
         : 'white';
     },
+    droppingColor() {
+      return (list) => (this.droppingList === list
+        ? this.linkColor
+        : 'grey lighten-3'
+      );
+    },
   },
   methods: {
     ...mapActions('boards', { getBoardById: 'get' }),
     ...mapActions('lists', { findLists: 'find' }),
     ...mapActions('cards', { findCards: 'find' }),
+    startDraggingCard(card) {
+      this.draggingCard = card;
+    },
+    endDraggingCard() {
+      if (this.droppingList) {
+        // eslint-disable-next-line no-underscore-dangle
+        this.draggingCard.listId = this.droppingList._id;
+        this.draggingCard.save();
+      }
+      this.draggingCard = null;
+      this.droppingList = null;
+    },
+    setDroppingList(event, list) {
+      this.droppingList = list;
+      event.preventDefault();
+    },
+    removeDroppingList() {
+      this.droppingList = null;
+    },
   },
   async created() {
     try {
