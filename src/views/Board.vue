@@ -14,6 +14,11 @@
               color="grey lighten-3"
             >
               <v-card-text class="pa-2">{{ list.name }}</v-card-text>
+              <v-card v-for="card in cards(list)" :key="card._id" class="ma-2">
+                <v-card-text class="pa-2">
+                  {{ card.title }}
+                </v-card-text>
+              </v-card>
             </v-card>
           </v-col>
 
@@ -64,12 +69,19 @@ export default {
   computed: {
     ...mapGetters('boards', { getBoardByIdInStore: 'get' }),
     ...mapGetters('lists', { findListsInStore: 'find' }),
+    ...mapGetters('cards', { findCardsInStore: 'find' }),
     board() {
       return this.getBoardByIdInStore(this.$route.params.board_id);
     },
     lists() {
       return this.findListsInStore({
         query: { boardId: this.$route.params.board_id },
+      }).data;
+    },
+    cards() {
+      return (list) => this.findCardsInStore({
+        // eslint-disable-next-line no-underscore-dangle
+        query: { listId: list._id },
       }).data;
     },
     headerColor() {
@@ -96,18 +108,27 @@ export default {
   methods: {
     ...mapActions('boards', { getBoardById: 'get' }),
     ...mapActions('lists', { findLists: 'find' }),
+    ...mapActions('cards', { findCards: 'find' }),
   },
-  created() {
-    this.getBoardById(this.$route.params.board_id)
-      .catch(() => {
-        // owner id is not matched as current user id
-        // board id is not found
-        this.$router.push('/boards');
+  async created() {
+    try {
+      await this.getBoardById(this.$route.params.board_id);
+
+      const lists = await this.findLists({
+        query: { boardId: this.$route.params.board_id },
       });
 
-    this.findLists({
-      query: { boardId: this.$route.params.board_id },
-    });
+      lists.data.forEach((list) => {
+        this.findCards({
+          // eslint-disable-next-line no-underscore-dangle
+          query: { listId: list._id },
+        });
+      });
+    } catch (error) {
+      // owner id is not matched as current user id
+      // board id is not found
+      this.$router.push('/boards');
+    }
   },
 };
 </script>
