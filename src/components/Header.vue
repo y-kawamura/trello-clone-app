@@ -3,7 +3,7 @@
     <v-toolbar-title class="font-italic font-weight-light pr-1">Trello Clone</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items>
-      <v-menu offset-y>
+      <v-menu offset-y transition="slide-x-reverse-transition">
         <template v-slot:activator="{on}">
           <v-btn v-on="on" text class="text-none pa-0">
             <v-avatar color="white" size="32" class="mx-2">
