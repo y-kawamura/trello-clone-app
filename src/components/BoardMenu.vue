@@ -1,0 +1,51 @@
+<template>
+  <v-slide-x-reverse-transition leave-absolute>
+    <v-list v-show="show" height="100%" width="250" class="sidebar" :color="`${color} lighten-4`">
+      <v-list-item :ripple="false" @click="$emit('hide')">
+        <v-list-item-content>
+          Board Menu
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider></v-divider>
+
+      <ActivityLogList
+        :board="board"
+        :color="color"
+      >
+      </ActivityLogList>
+    </v-list>
+  </v-slide-x-reverse-transition>
+</template>
+
+<script>
+import ActivityLogList from '@/components/ActivityLogList.vue';
+
+export default {
+  name: 'BoardMenu',
+  components: {
+    ActivityLogList,
+  },
+  props: {
+    color: {
+      type: String,
+      required: true,
+    },
+    show: {
+      type: Boolean,
+      required: true,
+    },
+    board: {
+      type: Object,
+      rquired: true,
+    },
+  },
+};
+</script>
+
+<style scoped>
+.sidebar {
+  position: fixed;
+  right: 0;
+  z-index: 1;
+}
+</style>

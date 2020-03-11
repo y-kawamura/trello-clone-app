@@ -3,7 +3,29 @@
     <Header :color="headerColor" />
 
     <v-content :class="bodyColor">
+      <!-- fixed side menu -->
+      <BoardMenu
+        v-if="!getBoardLoading"
+        :color="color"
+        :board="board"
+        :show="showBoardMenu"
+        @hide="showBoardMenu=false"
+      ></BoardMenu>
+
       <v-container fluid>
+        <!-- header area -->
+        <v-row class="ma-0">
+          <h1 class="headline" :class="`${color}--text text--lighten-5`">{{ boardName }}</h1>
+          <v-spacer></v-spacer>
+          <v-btn
+            :color="linkColor"
+            :class="`${color}--text text--darken-4`"
+            @click="showBoardMenu=true"
+            :ripple="false"
+          >Board Menu</v-btn>
+        </v-row>
+
+        <!-- main content -->
         <v-row>
           <v-col
             cols="4"
@@ -66,15 +88,17 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions, mapState } from 'vuex';
 import Header from '@/components/Header.vue';
 import ListForm from '@/components/ListForm.vue';
 import CardForm from '@/components/CardForm.vue';
+import BoardMenu from '@/components/BoardMenu.vue';
 
 export default {
   name: 'Board',
   data() {
     return {
+      showBoardMenu: false,
       showListForm: false,
       draggingCard: null,
       droppingList: null,
@@ -84,13 +108,22 @@ export default {
     Header,
     ListForm,
     CardForm,
+    BoardMenu,
   },
   computed: {
+    ...mapState('boards', { getBoardLoading: 'isGetPending' }),
+    ...mapState('lists', { findListsLoading: 'isFindPending' }),
+    ...mapState('cards', { findCardsLoading: 'isFindPending' }),
     ...mapGetters('boards', { getBoardByIdInStore: 'get' }),
     ...mapGetters('lists', { findListsInStore: 'find' }),
     ...mapGetters('cards', { findCardsInStore: 'find' }),
     board() {
       return this.getBoardByIdInStore(this.$route.params.board_id);
+    },
+    boardName() {
+      return this.board
+        ? this.board.name
+        : '';
     },
     lists() {
       return this.findListsInStore({
