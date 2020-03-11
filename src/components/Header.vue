@@ -1,59 +1,39 @@
 <template>
-  <div>
-    <!-- navigation drawer -->
-    <v-navigation-drawer
-      v-model="drawer"
-      right
-      temporary
-      app
-    >
-      <v-list nav>
-        <v-list-item link @click="drawer = !drawer">
-          <v-list-item-content>
-            <div class="avatar">
-              <v-avatar color="white" size="32">
-                <img
-                  src="@/assets/avatar.png"
-                  alt="User image"
-                >
-              </v-avatar>
-              <strong class="mx-2 font-weight-light">
-                {{ user.displayName }} @{{ user.username }}
-              </strong>
-            </div>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-divider></v-divider>
-
-        <v-list-item link @click="logout">
-          <v-list-item-title>Logout</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-
-    <v-app-bar
-      app
-      :color="color"
-      dark
-    >
-      <v-toolbar-title class="font-italic font-weight-light px-1">
-        Trello Clone
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <div class="avatar" @click="drawer = !drawer">
-        <v-avatar color="white" size="32">
-          <img
-            src="@/assets/avatar.png"
-            alt="User image"
-          >
-        </v-avatar>
-        <strong class="mx-2 font-weight-light">
-          {{ user.displayName }}
-        </strong>
-      </div>
-    </v-app-bar>
-  </div>
+  <v-app-bar :color="color" app dark>
+    <v-toolbar-title class="font-italic font-weight-light pr-1">Trello Clone</v-toolbar-title>
+    <v-spacer></v-spacer>
+    <v-toolbar-items>
+      <v-menu offset-y>
+        <template v-slot:activator="{on}">
+          <v-btn v-on="on" text class="text-none pa-0">
+            <v-avatar color="white" size="32" class="mx-2">
+              <img
+                src="@/assets/avatar.png"
+                alt="User image"
+              >
+            </v-avatar>
+            <span class="font-weight-light">
+              {{ user.displayName }}
+            </span>
+            <v-icon>mdi-menu-down</v-icon>
+          </v-btn>
+        </template>
+        <v-list width="150" elevation="20" class="mt-2">
+          <v-list-item link>
+            <v-list-item-content>
+              <v-list-item-title>Profile</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-divider></v-divider>
+          <v-list-item link @click="logout">
+            <v-list-item-content>
+              <v-list-item-title>Logout</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-toolbar-items>
+  </v-app-bar>
 </template>
 
 <script>
@@ -89,9 +69,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.avatar {
-  cursor: pointer;
-}
-</style>
