@@ -3,4 +3,7 @@ module.exports = {
     'vuetify',
     'feathers-vuex',
   ],
+  configureWebpack: {
+    devtool: 'source-map',
+  },
 };
