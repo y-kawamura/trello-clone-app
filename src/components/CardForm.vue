@@ -45,13 +45,9 @@ export default {
       type: Object,
       required: true,
     },
-    boardId: {
-      type: String,
+    board: {
+      type: Object,
       required: true,
-    },
-    background: {
-      type: String,
-      requierd: true,
     },
   },
   computed: {
@@ -59,13 +55,13 @@ export default {
       return !!this.card.title;
     },
     headerColor() {
-      return `${this.background} darken-3`;
+      return `${this.board.background} darken-3`;
     },
     bodyColor() {
-      return `${this.background} darken-2`;
+      return `${this.board.background} darken-2`;
     },
     linkColor() {
-      return `${this.background} lighten-3`;
+      return `${this.board.background} lighten-3`;
     },
   },
   methods: {
@@ -80,7 +76,8 @@ export default {
             const { Activity } = this.$FeathersVuex.api;
             const newActivity = new Activity({
               text: `${this.list.name} リストに ${this.card.title} カードを作成しました`,
-              boardId: this.boardId,
+              // eslint-disable-next-line no-underscore-dangle
+              boardId: this.board._id,
               // eslint-disable-next-line no-underscore-dangle
               cardId: created._id,
             });

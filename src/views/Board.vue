@@ -14,8 +14,8 @@
 
       <v-container fluid>
         <!-- header area -->
-        <v-row class="ma-0">
-          <h1 class="headline" :class="`${color}--text text--lighten-5`">{{ boardName }}</h1>
+        <v-row class="ma-0" v-if="!getBoardLoading">
+          <h1 class="headline" :class="`${color}--text text--lighten-5`">{{ board.name }}</h1>
           <v-spacer></v-spacer>
           <v-btn
             :color="linkColor"
@@ -26,38 +26,21 @@
         </v-row>
 
         <!-- main content -->
-        <v-row>
+        <v-row v-if="!(getBoardLoading || findListsLoading)">
           <v-col
             cols="4"
             v-for="list in lists"
             :key="list._id"
           >
-            <v-card
-              :color="droppingColor(list)"
-              @dragover="setDroppingList($event, list)"
-              @dragleave="removeDroppingList()"
-            >
-              <v-card-text class="pa-2">{{ list.name }}</v-card-text>
-              <v-card
-                v-for="card in cards(list)"
-                :key="card._id"
-                draggable="true"
-                @dragstart="startDraggingCard(card)"
-                @dragend="endDraggingCard()"
-                class="ma-2"
-              >
-                <v-card-text class="pa-2">
-                  {{ card.title }}
-                </v-card-text>
-              </v-card>
-              <v-card-text class="pa-2">
-                <CardForm
-                  :list="list"
-                  :boardId="board._id"
-                  :background="color"
-                />
-              </v-card-text>
-            </v-card>
+            <ListItem
+              :list="list"
+              :board="board"
+              :isDroppingTarget="isDroppingTarget(list)"
+              @dragcard="startDraggingCard"
+              @dropcard="endDraggingCard"
+              @dragoverlist="setDroppingList"
+              @dragleavelist="removeDroppingList"
+            ></ListItem>
           </v-col>
 
           <!-- New list -->
@@ -91,8 +74,8 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex';
 import Header from '@/components/Header.vue';
+import ListItem from '@/components/ListItem.vue';
 import ListForm from '@/components/ListForm.vue';
-import CardForm from '@/components/CardForm.vue';
 import BoardMenu from '@/components/BoardMenu.vue';
 
 export default {
@@ -107,24 +90,17 @@ export default {
   },
   components: {
     Header,
+    ListItem,
     ListForm,
-    CardForm,
     BoardMenu,
   },
   computed: {
     ...mapState('boards', { getBoardLoading: 'isGetPending' }),
     ...mapState('lists', { findListsLoading: 'isFindPending' }),
-    ...mapState('cards', { findCardsLoading: 'isFindPending' }),
     ...mapGetters('boards', { getBoardByIdInStore: 'get' }),
     ...mapGetters('lists', { findListsInStore: 'find' }),
-    ...mapGetters('cards', { findCardsInStore: 'find' }),
     board() {
       return this.getBoardByIdInStore(this.$route.params.board_id);
-    },
-    boardName() {
-      return this.board
-        ? this.board.name
-        : '';
     },
     lists() {
       return this.findListsInStore({
@@ -134,12 +110,6 @@ export default {
     listById() {
       // eslint-disable-next-line no-underscore-dangle
       return (id) => this.lists.find((list) => list._id === id);
-    },
-    cards() {
-      return (list) => this.findCardsInStore({
-        // eslint-disable-next-line no-underscore-dangle
-        query: { listId: list._id },
-      }).data;
     },
     headerColor() {
       return this.board
@@ -161,17 +131,13 @@ export default {
         ? `${this.board.background}`
         : 'white';
     },
-    droppingColor() {
-      return (list) => (this.droppingList === list
-        ? this.linkColor
-        : 'grey lighten-3'
-      );
+    isDroppingTarget() {
+      return (list) => this.droppingList === list;
     },
   },
   methods: {
     ...mapActions('boards', { getBoardById: 'get' }),
     ...mapActions('lists', { findLists: 'find' }),
-    ...mapActions('cards', { findCards: 'find' }),
     startDraggingCard(card) {
       this.draggingCard = card;
     },
@@ -195,11 +161,10 @@ export default {
       this.draggingCard = null;
       this.droppingList = null;
     },
-    setDroppingList(event, list) {
+    setDroppingList(list) {
       // eslint-disable-next-line no-underscore-dangle
       if (this.draggingCard.listId !== list._id) {
         this.droppingList = list;
-        event.preventDefault();
       }
     },
     removeDroppingList() {
@@ -210,15 +175,8 @@ export default {
     try {
       await this.getBoardById(this.$route.params.board_id);
 
-      const lists = await this.findLists({
+      this.findLists({
         query: { boardId: this.$route.params.board_id },
-      });
-
-      lists.data.forEach((list) => {
-        this.findCards({
-          // eslint-disable-next-line no-underscore-dangle
-          query: { listId: list._id },
-        });
       });
     } catch (error) {
       // owner id is not matched as current user id
