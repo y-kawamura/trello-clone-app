@@ -52,7 +52,8 @@
               </v-card>
               <v-card-text class="pa-2">
                 <CardForm
-                  :listId="list._id"
+                  :list="list"
+                  :boardId="board._id"
                   :background="color"
                 />
               </v-card-text>
@@ -130,6 +131,10 @@ export default {
         query: { boardId: this.$route.params.board_id },
       }).data;
     },
+    listById() {
+      // eslint-disable-next-line no-underscore-dangle
+      return (id) => this.lists.find((list) => list._id === id);
+    },
     cards() {
       return (list) => this.findCardsInStore({
         // eslint-disable-next-line no-underscore-dangle
@@ -170,18 +175,32 @@ export default {
     startDraggingCard(card) {
       this.draggingCard = card;
     },
-    endDraggingCard() {
+    async endDraggingCard() {
       if (this.droppingList) {
+        const fromListName = this.listById(this.draggingCard.listId).name;
+        const toListName = this.droppingList.name;
+
         // eslint-disable-next-line no-underscore-dangle
         this.draggingCard.listId = this.droppingList._id;
-        this.draggingCard.save();
+        await this.draggingCard.save();
+
+        const { Activity } = this.$FeathersVuex.api;
+        const newActivity = new Activity({
+          text: `${this.draggingCard.title} カードを ${fromListName} リストから ${toListName} リストに移動しました`,
+          // eslint-disable-next-line no-underscore-dangle
+          boardId: this.board._id,
+        });
+        newActivity.save();
       }
       this.draggingCard = null;
       this.droppingList = null;
     },
     setDroppingList(event, list) {
-      this.droppingList = list;
-      event.preventDefault();
+      // eslint-disable-next-line no-underscore-dangle
+      if (this.draggingCard.listId !== list._id) {
+        this.droppingList = list;
+        event.preventDefault();
+      }
     },
     removeDroppingList() {
       this.droppingList = null;

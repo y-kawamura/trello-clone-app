@@ -66,6 +66,13 @@ export default {
         const list = new List(this.list);
         list.save()
           .then(() => {
+            const { Activity } = this.$FeathersVuex.api;
+            const newActivity = new Activity({
+              text: `${this.list.name} リストを作成しました`,
+              boardId: this.boardId,
+            });
+            newActivity.save();
+
             this.$emit('create');
           })
           .catch((error) => {

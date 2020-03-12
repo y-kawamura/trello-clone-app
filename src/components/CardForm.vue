@@ -41,7 +41,11 @@ export default {
     };
   },
   props: {
-    listId: {
+    list: {
+      type: Object,
+      required: true,
+    },
+    boardId: {
       type: String,
       required: true,
     },
@@ -68,10 +72,20 @@ export default {
     createCard() {
       if (this.isValid) {
         const { Card } = this.$FeathersVuex.api;
-        this.card.listId = this.listId;
+        // eslint-disable-next-line no-underscore-dangle
+        this.card.listId = this.list._id;
         const card = new Card(this.card);
         card.save()
-          .then(() => {
+          .then((created) => {
+            const { Activity } = this.$FeathersVuex.api;
+            const newActivity = new Activity({
+              text: `${this.list.name} リストに ${this.card.title} カードを作成しました`,
+              boardId: this.boardId,
+              // eslint-disable-next-line no-underscore-dangle
+              cardId: created._id,
+            });
+            newActivity.save();
+
             this.card = {
               title: '',
             };

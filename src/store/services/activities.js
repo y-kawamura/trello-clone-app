@@ -14,7 +14,6 @@ class Activity extends BaseModel {
     return {
       text: '',
       boardId: '',
-      cardId: '',
     };
   }
 }
