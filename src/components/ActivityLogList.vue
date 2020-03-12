@@ -1,9 +1,7 @@
 <template>
-  <v-list :color="`${color} lighten-4`">
-    <v-subheader>Activity Log</v-subheader>
-
+  <v-list :color="`${color} lighten-4`" dense>
     <!-- progress circle -->
-    <v-list-item v-if="isActivitiesLoading">
+    <v-list-item v-if="isLoading">
       <v-list-item-content>
         <v-progress-circular
           :size="50"
@@ -13,7 +11,7 @@
       </v-list-item-content>
     </v-list-item>
 
-    <template v-if="!isActivitiesLoading">
+    <template v-if="!isLoading">
       <v-list-item
         v-for="activity in activityLogsOnBoard"
         :key="activity._id"
@@ -47,6 +45,7 @@ export default {
   },
   computed: {
     ...mapState('activities', { isActivitiesLoading: 'isFindPending' }),
+    ...mapState('users', { isUsersLoading: 'isGetPending' }),
     ...mapGetters('activities', { findActivitiesInStore: 'find' }),
     ...mapGetters('users', { getUserInStore: 'get' }),
     activityLogsOnBoard() {
@@ -56,6 +55,9 @@ export default {
           boardId: this.board._id,
         },
       }).data;
+    },
+    isLoading() {
+      return this.isActivitiesLoading || this.isUsersLoading;
     },
     userById() {
       // eslint-disable-next-line no-underscore-dangle
@@ -75,8 +77,8 @@ export default {
     ...mapActions('activities', { findActivities: 'find' }),
     ...mapActions('users', { getUser: 'get' }),
   },
-  async created() {
-    await this.findActivities({
+  created() {
+    this.findActivities({
       query: {
         // eslint-disable-next-line no-underscore-dangle
         boardId: this.board._id,
@@ -89,6 +91,9 @@ export default {
 };
 </script>
 
-<style>
-
+<style scoped>
+.v-list {
+  max-height: 85%;
+  overflow-y: scroll;
+}
 </style>

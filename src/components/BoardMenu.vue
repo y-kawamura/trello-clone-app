@@ -1,13 +1,22 @@
 <template>
   <v-slide-x-reverse-transition leave-absolute>
-    <v-list v-show="show" height="100%" width="250" class="sidebar" :color="`${color} lighten-4`">
+    <v-list
+      v-if="show"
+      height="100%"
+      width="300"
+      class="sidebar"
+      :color="`${color} lighten-4`"
+    >
       <v-list-item :ripple="false" @click="$emit('hide')">
-        <v-list-item-content>
+        <v-list-item-content :class="`${color}--text text--darken-4`">
           Board Menu
         </v-list-item-content>
       </v-list-item>
       <v-divider></v-divider>
 
+      <v-list-item>
+        <v-list-item-content>Activity Log</v-list-item-content>
+      </v-list-item>
       <ActivityLogList
         :board="board"
         :color="color"
