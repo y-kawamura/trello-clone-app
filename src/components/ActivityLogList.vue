@@ -21,7 +21,8 @@
           <v-icon v-else>mdi-account</v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
-          {{ completeLog(activity) }}
+          <p class="log-text">{{ completeLog(activity) }}</p>
+          <v-list-item-subtitle>{{ sinceTime(activity.createdAt )}}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
     </template>
@@ -29,6 +30,7 @@
 </template>
 
 <script>
+import * as moment from 'moment';
 import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
@@ -70,6 +72,9 @@ export default {
     userImage() {
       return (userId) => this.userById(userId).imageUrl;
     },
+    sinceTime() {
+      return (time) => moment(time).fromNow();
+    },
   },
   methods: {
     ...mapActions('activities', { findActivities: 'find' }),
@@ -91,5 +96,9 @@ export default {
 .v-list {
   max-height: 85%;
   overflow-y: scroll;
+}
+.log-text {
+  font-size: 0.85rem;
+  line-height: 1.1rem;
 }
 </style>
