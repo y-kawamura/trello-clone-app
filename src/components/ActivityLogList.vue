@@ -52,9 +52,7 @@ export default {
     ...mapGetters('users', { getUserInStore: 'get' }),
     activityLogsOnBoard() {
       return this.findActivitiesInStore({
-        query: {
-          boardId: this.board._id,
-        },
+        query: this.querySortLatestLogOnBoard,
       }).data;
     },
     isLoading() {
@@ -75,6 +73,14 @@ export default {
     sinceTime() {
       return (time) => moment(time).fromNow();
     },
+    querySortLatestLogOnBoard() {
+      return ({
+        boardId: this.board._id,
+        $sort: {
+          createdAt: -1,
+        },
+      });
+    },
   },
   methods: {
     ...mapActions('activities', { findActivities: 'find' }),
@@ -82,9 +88,7 @@ export default {
   },
   created() {
     this.findActivities({
-      query: {
-        boardId: this.board._id,
-      },
+      query: this.querySortLatestLogOnBoard,
     });
 
     this.getUser(this.board.ownerId);
