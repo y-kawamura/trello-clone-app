@@ -86,7 +86,6 @@ export default {
     boards() {
       return this.findBoardsInStore({
         query: {
-          // eslint-disable-next-line no-underscore-dangle
           ownerId: this.user._id,
         },
       }).data;
@@ -98,7 +97,6 @@ export default {
   created() {
     this.findBoards({
       query: {
-        // eslint-disable-next-line no-underscore-dangle
         ownerId: this.user._id,
       },
     });

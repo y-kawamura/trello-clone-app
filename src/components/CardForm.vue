@@ -68,7 +68,6 @@ export default {
     createCard() {
       if (this.isValid) {
         const { Card } = this.$FeathersVuex.api;
-        // eslint-disable-next-line no-underscore-dangle
         this.card.listId = this.list._id;
         const card = new Card(this.card);
         card.save()
@@ -76,9 +75,7 @@ export default {
             const { Activity } = this.$FeathersVuex.api;
             const newActivity = new Activity({
               text: `${this.list.name} リストに ${this.card.title} カードを作成しました`,
-              // eslint-disable-next-line no-underscore-dangle
               boardId: this.board._id,
-              // eslint-disable-next-line no-underscore-dangle
               cardId: created._id,
             });
             newActivity.save();

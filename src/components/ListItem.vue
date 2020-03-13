@@ -70,7 +70,6 @@ export default {
     },
     cards() {
       return (list) => this.findCardsInStore({
-        // eslint-disable-next-line no-underscore-dangle
         query: { listId: list._id },
       }).data;
     },
@@ -93,7 +92,6 @@ export default {
   },
   created() {
     this.findCards({
-      // eslint-disable-next-line no-underscore-dangle
       query: { listId: this.list._id },
     });
   },

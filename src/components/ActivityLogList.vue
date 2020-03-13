@@ -51,7 +51,6 @@ export default {
     activityLogsOnBoard() {
       return this.findActivitiesInStore({
         query: {
-          // eslint-disable-next-line no-underscore-dangle
           boardId: this.board._id,
         },
       }).data;
@@ -60,7 +59,6 @@ export default {
       return this.isActivitiesLoading || this.isUsersLoading;
     },
     userById() {
-      // eslint-disable-next-line no-underscore-dangle
       return (userId) => this.getUserInStore(userId);
     },
     completeLog() {
@@ -80,12 +78,10 @@ export default {
   created() {
     this.findActivities({
       query: {
-        // eslint-disable-next-line no-underscore-dangle
         boardId: this.board._id,
       },
     });
 
-    // eslint-disable-next-line no-underscore-dangle
     this.getUser(this.board.ownerId);
   },
 };

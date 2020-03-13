@@ -108,7 +108,6 @@ export default {
       }).data;
     },
     listById() {
-      // eslint-disable-next-line no-underscore-dangle
       return (id) => this.lists.find((list) => list._id === id);
     },
     headerColor() {
@@ -146,14 +145,12 @@ export default {
         const fromListName = this.listById(this.draggingCard.listId).name;
         const toListName = this.droppingList.name;
 
-        // eslint-disable-next-line no-underscore-dangle
         this.draggingCard.listId = this.droppingList._id;
         await this.draggingCard.save();
 
         const { Activity } = this.$FeathersVuex.api;
         const newActivity = new Activity({
           text: `${this.draggingCard.title} カードを ${fromListName} リストから ${toListName} リストに移動しました`,
-          // eslint-disable-next-line no-underscore-dangle
           boardId: this.board._id,
         });
         newActivity.save();
@@ -162,7 +159,6 @@ export default {
       this.droppingList = null;
     },
     setDroppingList(list) {
-      // eslint-disable-next-line no-underscore-dangle
       if (this.draggingCard.listId !== list._id) {
         this.droppingList = list;
       }

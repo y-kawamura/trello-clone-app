@@ -53,7 +53,9 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+      "no-underscore-dangle": 0
+    }
   },
   "browserslist": [
     "> 1%",
