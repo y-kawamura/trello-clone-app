@@ -35,11 +35,6 @@
             <ListItem
               :list="list"
               :board="board"
-              :isDroppingTarget="isDroppingTarget(list)"
-              @dragcard="startDraggingCard"
-              @dropcard="endDraggingCard"
-              @dragoverlist="setDroppingList"
-              @dragleavelist="removeDroppingList"
             ></ListItem>
           </v-col>
 
@@ -84,8 +79,6 @@ export default {
     return {
       showBoardMenu: false,
       showListForm: false,
-      draggingCard: null,
-      droppingList: null,
     };
   },
   components: {
@@ -107,9 +100,6 @@ export default {
         query: { boardId: this.$route.params.board_id },
       }).data;
     },
-    listById() {
-      return (id) => this.lists.find((list) => list._id === id);
-    },
     headerColor() {
       return this.board
         ? `${this.board.background} darken-3`
@@ -130,42 +120,10 @@ export default {
         ? `${this.board.background}`
         : 'white';
     },
-    isDroppingTarget() {
-      return (list) => this.droppingList === list;
-    },
   },
   methods: {
     ...mapActions('boards', { getBoardById: 'get' }),
     ...mapActions('lists', { findLists: 'find' }),
-    startDraggingCard(card) {
-      this.draggingCard = card;
-    },
-    async endDraggingCard() {
-      if (this.droppingList) {
-        const fromListName = this.listById(this.draggingCard.listId).name;
-        const toListName = this.droppingList.name;
-
-        this.draggingCard.listId = this.droppingList._id;
-        await this.draggingCard.save();
-
-        const { Activity } = this.$FeathersVuex.api;
-        const newActivity = new Activity({
-          text: `${this.draggingCard.title} カードを ${fromListName} リストから ${toListName} リストに移動しました`,
-          boardId: this.board._id,
-        });
-        newActivity.save();
-      }
-      this.draggingCard = null;
-      this.droppingList = null;
-    },
-    setDroppingList(list) {
-      if (this.draggingCard.listId !== list._id) {
-        this.droppingList = list;
-      }
-    },
-    removeDroppingList() {
-      this.droppingList = null;
-    },
   },
   async created() {
     try {
