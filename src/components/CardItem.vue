@@ -3,10 +3,30 @@
     draggable="true"
     @dragstart="onCardDragStart(card)"
     @dragend="onCardDragEnd"
+    @click="showEditForm"
+    :ripple="false"
   >
-    <v-card-text class="pa-2">
-      {{ card.title }}
+    <v-card-text
+      v-if="!isShowEditForm"
+      class="pa-2"
+    >
+      {{ this.card.title }}
     </v-card-text>
+    <v-form
+      v-if="isShowEditForm"
+      @submit.prevent="updateTitle"
+    >
+      <v-text-field
+        v-model="newTitle"
+        outlined
+        hide-details
+        dense
+        flat
+        autofocus
+        @blur="isShowEditForm=false"
+      >
+      </v-text-field>
+    </v-form>
   </v-card>
 </template>
 
@@ -15,9 +35,15 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'CardItem',
+  data() {
+    return {
+      isShowEditForm: false,
+      newTitle: '',
+    };
+  },
   props: {
-    card: {
-      type: Object,
+    cardId: {
+      type: String,
       required: true,
     },
     board: {
@@ -28,6 +54,10 @@ export default {
   computed: {
     ...mapState('board', ['draggingCard', 'droppingList']),
     ...mapGetters('lists', { getListInStore: 'get' }),
+    ...mapGetters('cards', { getCardInStore: 'get' }),
+    card() {
+      return this.getCardInStore(this.cardId);
+    },
   },
   methods: {
     ...mapActions('board', ['setDraggingCard', 'setDroppingList']),
@@ -55,6 +85,16 @@ export default {
 
       this.setDraggingCard(null);
       this.setDroppingList(null);
+    },
+    showEditForm() {
+      // set current title when edit form opened
+      this.newTitle = this.card.title;
+      this.isShowEditForm = true;
+    },
+    async updateTitle() {
+      this.card.title = this.newTitle;
+      await this.card.save();
+      this.isShowEditForm = false;
     },
   },
 };

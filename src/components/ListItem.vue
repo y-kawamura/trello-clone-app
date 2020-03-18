@@ -11,7 +11,7 @@
       <CardItem
         v-for="card in cards"
         :key="card._id"
-        :card="card"
+        :cardId="card._id"
         :board="board"
         class="ma-2"
       >
