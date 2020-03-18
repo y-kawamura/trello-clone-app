@@ -12,7 +12,6 @@
         v-for="card in cards"
         :key="card._id"
         :cardId="card._id"
-        :board="board"
         class="ma-2"
       >
       </CardItem>
@@ -22,7 +21,6 @@
     <v-card-text class="pa-2">
       <CardForm
         :list="list"
-        :board="board"
       />
     </v-card-text>
   </v-card>
@@ -45,14 +43,10 @@ export default {
       type: Object,
       required: true,
     },
-    board: {
-      type: Object,
-      required: true,
-    },
   },
   computed: {
     ...mapState('cards', { findCardsLoading: 'isFindPending' }),
-    ...mapState('board', ['draggingCard', 'droppingList']),
+    ...mapState('board', ['draggingCard', 'droppingList', 'board']),
     ...mapGetters('cards', { findCardsInStore: 'find' }),
     isOwnDraggingCard() {
       return this.draggingCard.listId === this.list._id;

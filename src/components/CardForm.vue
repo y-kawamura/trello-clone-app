@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'CardForm',
   data() {
@@ -45,12 +47,9 @@ export default {
       type: Object,
       required: true,
     },
-    board: {
-      type: Object,
-      required: true,
-    },
   },
   computed: {
+    ...mapState('board', ['board']),
     isValid() {
       return !!this.card.title;
     },

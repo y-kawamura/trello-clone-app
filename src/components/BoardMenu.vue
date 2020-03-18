@@ -18,7 +18,6 @@
         <v-list-item-content>Activity Log</v-list-item-content>
       </v-list-item>
       <ActivityLogList
-        :board="board"
         :color="color"
       >
       </ActivityLogList>
@@ -42,10 +41,6 @@ export default {
     show: {
       type: Boolean,
       required: true,
-    },
-    board: {
-      type: Object,
-      rquired: true,
     },
   },
 };

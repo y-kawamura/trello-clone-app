@@ -36,10 +36,6 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 export default {
   name: 'ActivityLogList',
   props: {
-    board: {
-      type: Object,
-      required: true,
-    },
     color: {
       type: String,
       required: true,
@@ -48,6 +44,7 @@ export default {
   computed: {
     ...mapState('activities', { isActivitiesLoading: 'isFindPending' }),
     ...mapState('users', { isUsersLoading: 'isGetPending' }),
+    ...mapState('board', ['board']),
     ...mapGetters('activities', { findActivitiesInStore: 'find' }),
     ...mapGetters('users', { getUserInStore: 'get' }),
     activityLogsOnBoard() {

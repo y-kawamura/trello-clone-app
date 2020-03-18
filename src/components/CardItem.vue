@@ -46,13 +46,9 @@ export default {
       type: String,
       required: true,
     },
-    board: {
-      type: Object,
-      required: true,
-    },
   },
   computed: {
-    ...mapState('board', ['draggingCard', 'droppingList']),
+    ...mapState('board', ['draggingCard', 'droppingList', 'board']),
     ...mapGetters('lists', { getListInStore: 'get' }),
     ...mapGetters('cards', { getCardInStore: 'get' }),
     card() {

@@ -25,6 +25,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
+
 export default {
   name: 'ListForm',
   data() {
@@ -35,16 +38,13 @@ export default {
     };
   },
   props: {
-    boardId: {
-      type: String,
-      required: true,
-    },
     background: {
       type: String,
       requierd: true,
     },
   },
   computed: {
+    ...mapState('board', ['board']),
     isValid() {
       return !!this.list.name;
     },
@@ -62,14 +62,14 @@ export default {
     createList() {
       if (this.isValid) {
         const { List } = this.$FeathersVuex.api;
-        this.list.boardId = this.boardId;
+        this.list.boardId = this.board._id;
         const list = new List(this.list);
         list.save()
           .then(() => {
             const { Activity } = this.$FeathersVuex.api;
             const newActivity = new Activity({
               text: `${this.list.name} リストを作成しました`,
-              boardId: this.boardId,
+              boardId: this.board._id,
             });
             newActivity.save();
 

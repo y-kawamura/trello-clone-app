@@ -7,7 +7,6 @@
       <BoardMenu
         v-if="!getBoardLoading"
         :color="color"
-        :board="board"
         :show="showBoardMenu"
         @hide="showBoardMenu=false"
       ></BoardMenu>
@@ -34,7 +33,6 @@
           >
             <ListItem
               :list="list"
-              :board="board"
             ></ListItem>
           </v-col>
 
@@ -54,7 +52,6 @@
             </v-card>
             <ListForm
               v-if="showListForm"
-              :boardId="this.$route.params.board_id"
               :background="color"
               @create="showListForm=false"
               @cancel="showListForm=false"
@@ -90,14 +87,11 @@ export default {
   computed: {
     ...mapState('boards', { getBoardLoading: 'isGetPending' }),
     ...mapState('lists', { findListsLoading: 'isFindPending' }),
-    ...mapGetters('boards', { getBoardByIdInStore: 'get' }),
+    ...mapState('board', ['board']),
     ...mapGetters('lists', { findListsInStore: 'find' }),
-    board() {
-      return this.getBoardByIdInStore(this.$route.params.board_id);
-    },
     lists() {
       return this.findListsInStore({
-        query: { boardId: this.$route.params.board_id },
+        query: { boardId: this.board._id },
       }).data;
     },
     headerColor() {
@@ -124,13 +118,15 @@ export default {
   methods: {
     ...mapActions('boards', { getBoardById: 'get' }),
     ...mapActions('lists', { findLists: 'find' }),
+    ...mapActions('board', ['setBoard']),
   },
   async created() {
     try {
-      await this.getBoardById(this.$route.params.board_id);
+      const board = await this.getBoardById(this.$route.params.board_id);
+      this.setBoard(board);
 
       this.findLists({
-        query: { boardId: this.$route.params.board_id },
+        query: { boardId: this.board._id },
       });
     } catch (error) {
       // owner id is not matched as current user id
