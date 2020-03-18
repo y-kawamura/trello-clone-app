@@ -8,7 +8,7 @@
           <v-btn v-on="on" text class="text-none pa-0">
             <v-avatar color="white" size="32" class="mx-2">
               <img
-                src="@/assets/avatar.png"
+                :src="userImage"
                 alt="User image"
               >
             </v-avatar>
@@ -38,6 +38,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import NoAvatar from '@/assets/avatar.png';
 
 export default {
   name: 'Boards',
@@ -54,6 +55,9 @@ export default {
   },
   computed: {
     ...mapGetters('auth', ['user']),
+    userImage() {
+      return this.user.imageUrl || NoAvatar;
+    },
   },
   methods: {
     ...mapActions('auth', { authLogout: 'logout' }),
