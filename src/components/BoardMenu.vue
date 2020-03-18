@@ -5,10 +5,10 @@
       height="100%"
       width="300"
       class="sidebar"
-      :color="`${color} lighten-4`"
+      :color="bgColor('lighten-4')"
     >
       <v-list-item :ripple="false" @click="$emit('hide')">
-        <v-list-item-content :class="`${color}--text text--darken-4`">
+        <v-list-item-content :class="textColor('darken-4')">
           Board Menu
         </v-list-item-content>
       </v-list-item>
@@ -17,15 +17,13 @@
       <v-list-item>
         <v-list-item-content>Activity Log</v-list-item-content>
       </v-list-item>
-      <ActivityLogList
-        :color="color"
-      >
-      </ActivityLogList>
+      <ActivityLogList />
     </v-list>
   </v-slide-x-reverse-transition>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import ActivityLogList from '@/components/ActivityLogList.vue';
 
 export default {
@@ -34,14 +32,13 @@ export default {
     ActivityLogList,
   },
   props: {
-    color: {
-      type: String,
-      required: true,
-    },
     show: {
       type: Boolean,
       required: true,
     },
+  },
+  computed: {
+    ...mapGetters('board', ['bgColor', 'textColor']),
   },
 };
 </script>

@@ -48,11 +48,12 @@ export default {
     ...mapState('cards', { findCardsLoading: 'isFindPending' }),
     ...mapState('board', ['draggingCard', 'droppingList', 'board']),
     ...mapGetters('cards', { findCardsInStore: 'find' }),
+    ...mapGetters('board', ['bgColor']),
     isOwnDraggingCard() {
       return this.draggingCard.listId === this.list._id;
     },
     cardColor() {
-      return this.droppingList === this.list ? `${this.board.background} lighten-3` : 'grey lighten-3';
+      return this.droppingList === this.list ? this.bgColor('lighten-3') : 'grey lighten-3';
     },
     cards() {
       return this.findCardsInStore({

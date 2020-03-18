@@ -18,19 +18,19 @@
         class="mb-1"
         dense
         flat
-        :color="bodyColor"
+        :color="bgColor('darken-2')"
         placeholder="Input card title..."
         autofocus
       >
       </v-text-field>
-      <v-btn type="submit" :color="headerColor" dark depressed class="mr-1">Add</v-btn>
-      <v-btn :color="headerColor" outlined @click="showForm=false">Close</v-btn>
+      <v-btn type="submit" :color="bgColor('darken-3')" dark depressed class="mr-1">Add</v-btn>
+      <v-btn :color="bgColor('darken-3')" outlined @click="showForm=false">Close</v-btn>
     </v-form>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'CardForm',
@@ -50,17 +50,9 @@ export default {
   },
   computed: {
     ...mapState('board', ['board']),
+    ...mapGetters('board', ['bgColor']),
     isValid() {
       return !!this.card.title;
-    },
-    headerColor() {
-      return `${this.board.background} darken-3`;
-    },
-    bodyColor() {
-      return `${this.board.background} darken-2`;
-    },
-    linkColor() {
-      return `${this.board.background} lighten-3`;
     },
   },
   methods: {

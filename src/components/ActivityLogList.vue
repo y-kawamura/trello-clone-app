@@ -1,11 +1,11 @@
 <template>
-  <v-list :color="`${color} lighten-4`" dense>
+  <v-list :color="bgColor('lighten-4')" dense>
     <!-- progress circle -->
     <v-list-item v-if="isLoading">
       <v-list-item-content>
         <v-progress-circular
           :size="50"
-          color="indigo accent-4"
+          :color="bgColor('accent-4')"
           indeterminate
         ></v-progress-circular>
       </v-list-item-content>
@@ -35,18 +35,13 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'ActivityLogList',
-  props: {
-    color: {
-      type: String,
-      required: true,
-    },
-  },
   computed: {
     ...mapState('activities', { isActivitiesLoading: 'isFindPending' }),
     ...mapState('users', { isUsersLoading: 'isGetPending' }),
     ...mapState('board', ['board']),
     ...mapGetters('activities', { findActivitiesInStore: 'find' }),
     ...mapGetters('users', { getUserInStore: 'get' }),
+    ...mapGetters('board', ['bgColor']),
     activityLogsOnBoard() {
       return this.findActivitiesInStore({
         query: this.querySortLatestLogOnBoard,

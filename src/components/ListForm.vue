@@ -1,7 +1,7 @@
 <template>
   <v-card
     hover
-    :color="linkColor"
+    :color="bgColor('lighten-3')"
   >
     <v-card-text class="pa-2">
       <v-form @submit.prevent="createList">
@@ -12,20 +12,20 @@
           class="mb-1"
           dense
           flat
-          :color="bodyColor"
+          :color="bgColor('darken-2')"
           placeholder="Input list title..."
           autofocus
         >
         </v-text-field>
-        <v-btn type="submit" :color="headerColor" dark depressed class="mr-1">Add</v-btn>
-        <v-btn :color="headerColor" outlined @click="$emit('cancel')">Close</v-btn>
+        <v-btn type="submit" :color="bgColor('darken-3')" dark depressed class="mr-1">Add</v-btn>
+        <v-btn :color="bgColor('darken-3')" outlined @click="$emit('cancel')">Close</v-btn>
       </v-form>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 
 export default {
@@ -37,25 +37,11 @@ export default {
       },
     };
   },
-  props: {
-    background: {
-      type: String,
-      requierd: true,
-    },
-  },
   computed: {
     ...mapState('board', ['board']),
+    ...mapGetters('board', ['bgColor']),
     isValid() {
       return !!this.list.name;
-    },
-    headerColor() {
-      return `${this.background} darken-3`;
-    },
-    bodyColor() {
-      return `${this.background} darken-2`;
-    },
-    linkColor() {
-      return `${this.background} lighten-3`;
     },
   },
   methods: {
