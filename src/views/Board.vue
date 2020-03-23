@@ -9,10 +9,13 @@
         @hide="showBoardMenu=false"
       ></BoardMenu>
 
-      <v-container fluid>
+      <v-container fluid ma-0 pa-0>
         <!-- header area -->
-        <v-row class="ma-0">
-          <h1 class="headline" :class="textColor('lighten-5')">{{ board.name }}</h1>
+        <v-row class="mx-3 mt-3 mb-2">
+          <h1
+            class="headline font-weight-bold"
+            :class="textColor('lighten-5')"
+          >{{ board.name }}</h1>
           <v-spacer></v-spacer>
           <v-btn
             :color="bgColor('lighten-3')"
@@ -23,23 +26,24 @@
         </v-row>
 
         <!-- main content -->
-        <v-row v-if="!findListsLoading">
-          <v-col
-            cols="4"
+        <div v-if="!findListsLoading" class="d-flex board">
+          <div
             v-for="list in lists"
             :key="list._id"
           >
             <ListItem
+              class="list"
               :list="list"
             ></ListItem>
-          </v-col>
+          </div>
 
           <!-- New list -->
-          <v-col cols="4">
+          <div>
             <v-card
               v-if="!showListForm"
               hover
               :color="bgColor('lighten-3')"
+              class="list"
             >
               <v-card-text
                 @click="showListForm = true"
@@ -52,9 +56,10 @@
               v-if="showListForm"
               @create="showListForm=false"
               @cancel="showListForm=false"
+              class="list"
             />
-          </v-col>
-        </v-row>
+          </div>
+        </div>
       </v-container>
     </v-content>
   </v-app>
@@ -117,3 +122,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.board {
+  overflow-x: scroll;
+  height: 80vh;
+}
+.list {
+  width: 17.5rem;
+  max-height: 75vh;
+  margin: 0.5rem;
+}
+</style>

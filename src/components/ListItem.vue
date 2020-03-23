@@ -4,16 +4,19 @@
     @dragover="onListDragOver($event)"
     @dragleave="onListDragLeave"
   >
-    <v-card-title class="pt-2 pb-0">
+    <v-card-title class="pa-0">
       <span
+        class="py-2 px-3"
         @click="showListForm"
         v-if="!isShowListForm"
       >
         {{ list.name }}
       </span>
       <v-form
+        class="pa-1"
         v-if="isShowListForm"
         @submit.prevent="updateListName"
+        style="width: 100%;"
       >
         <v-text-field
           v-model="newListName"
@@ -22,6 +25,7 @@
           dense
           flat
           autofocus
+          full-width
           @blur="isShowListForm=false"
         >
         </v-text-field>
@@ -29,7 +33,7 @@
     </v-card-title>
 
     <!-- cards -->
-    <template>
+    <div class="card-list">
       <CardItem
         v-for="card in cards"
         :key="card._id"
@@ -37,7 +41,7 @@
         class="ma-2"
       >
       </CardItem>
-    </template>
+    </div>
 
     <!-- new card form -->
     <v-card-text class="pa-2">
@@ -119,3 +123,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.card-list {
+  max-height: 55vh;
+  overflow-y: auto;
+}
+</style>
