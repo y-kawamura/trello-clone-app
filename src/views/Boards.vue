@@ -17,30 +17,35 @@
               </v-card-title>
             </v-card>
           </v-col>
-          <v-col cols="12" sm="6" md="4" v-for="board in boards" :key="board._id">
+          <v-col cols="12" sm="6" md="3" v-for="board in boards" :key="board._id">
             <v-card
               link
               :to="{ name: 'Board', params: { board_id: board._id } }"
               hover
-              height="150px"
               dark
               :color="board.background"
             >
               <v-card-title>
                 {{ board.name }}
               </v-card-title>
+              <v-card-actions class="mb-2">
+                <v-spacer></v-spacer>
+                <v-btn icon @click.prevent="showBoardEdit=true">
+                  <v-icon>mdi-square-edit-outline</v-icon>
+                </v-btn>
+              </v-card-actions>
             </v-card>
           </v-col>
 
           <!-- new board -->
           <v-dialog v-model="showBoardForm" width="400">
             <template v-slot:activator="{ on }">
-              <v-col cols="12" sm="6" md="4">
+              <v-col cols="12" sm="6" md="3">
                 <v-card
                   v-on="on"
                   link
                   hover
-                  height="150px"
+                  height="115px"
                 >
                   <v-row justify="center" style="height:100%;">
                     <v-card-title class="grey--text text--lighten-1">
