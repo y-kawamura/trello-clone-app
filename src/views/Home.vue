@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="font-weight-thin display-3 mt-12 text-center">
+    <h1 class="logo mt-12 text-center">
       Trello Clone
     </h1>
     <p class="font-weight-thin display-1 my-4 text-center">
@@ -32,3 +32,13 @@ export default {
   name: 'Home',
 };
 </script>
+
+<style scoped>
+.logo {
+  font-family: 'Yellowtail', cursive;
+  font-size: 5rem;
+  background: linear-gradient(0deg, #e66465, #8690ff);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+</style>

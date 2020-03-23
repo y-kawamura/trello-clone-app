@@ -1,11 +1,15 @@
 <template>
   <v-app-bar :color="color" app dark>
-    <v-toolbar-title class="font-italic font-weight-light pr-1">Trello Clone</v-toolbar-title>
+    <v-toolbar-title>
+      <router-link
+        :to="{name: 'Home'}"
+      >Trello Clone</router-link>
+    </v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items>
       <v-menu offset-y transition="slide-x-reverse-transition">
         <template v-slot:activator="{on}">
-          <v-btn v-on="on" text class="text-none pa-0">
+          <v-btn v-on="on" text :ripple="false" :hover="false" class="text-none pa-0">
             <v-avatar color="white" size="32" class="mx-2">
               <img
                 :src="userImage"
@@ -50,7 +54,7 @@ export default {
   props: {
     color: {
       type: String,
-      default: 'indigo',
+      default: 'grey',
     },
   },
   computed: {
@@ -73,3 +77,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.router-link-active {
+  color: white;
+  text-decoration: none;
+  font-family: 'Yellowtail', cursive;
+  font-size: 1.5rem;
+}
+.v-btn:before {
+  display: none;
+}
+</style>
