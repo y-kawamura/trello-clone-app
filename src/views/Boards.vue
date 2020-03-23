@@ -30,15 +30,23 @@
               </v-card-title>
               <v-card-actions class="mb-2">
                 <v-spacer></v-spacer>
-                <v-btn icon @click.prevent="showBoardEdit=true">
+                <v-btn icon @click.prevent="showBoardEdit(board)">
                   <v-icon>mdi-square-edit-outline</v-icon>
                 </v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
 
+          <v-dialog v-if="isShowBoardEdit" v-model="isShowBoardEdit" width="400">
+            <BoardEdit
+              :editBoard="editBoard"
+              @cencel="isShowBoardEdit = false"
+              @update="isShowBoardEdit = false"
+            />
+          </v-dialog>
+
           <!-- new board -->
-          <v-dialog v-model="showBoardForm" width="400">
+          <v-dialog v-model="isShowBoardForm" width="400">
             <template v-slot:activator="{ on }">
               <v-col cols="12" sm="6" md="3">
                 <v-card
@@ -57,8 +65,8 @@
             </template>
 
             <BoardForm
-              @cencel="showBoardForm = false"
-              @create="showBoardForm = false"
+              @cencel="isShowBoardForm = false"
+              @create="isShowBoardForm = false"
             />
           </v-dialog>
 
@@ -72,16 +80,20 @@
 import { mapState, mapGetters, mapActions } from 'vuex';
 import Header from '@/components/Header.vue';
 import BoardForm from '@/components/BoardForm.vue';
+import BoardEdit from '@/components/BoardEdit.vue';
 
 export default {
   name: 'Boards',
   components: {
     Header,
     BoardForm,
+    BoardEdit,
   },
   data() {
     return {
-      showBoardForm: false,
+      editBoard: null,
+      isShowBoardEdit: false,
+      isShowBoardForm: false,
     };
   },
   computed: {
@@ -98,6 +110,10 @@ export default {
   },
   methods: {
     ...mapActions('boards', { findBoards: 'find' }),
+    showBoardEdit(board) {
+      this.editBoard = board;
+      this.isShowBoardEdit = true;
+    },
   },
   created() {
     this.findBoards({

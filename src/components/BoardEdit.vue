@@ -1,10 +1,10 @@
 <template>
   <v-card light class="text--grey darken-4--text">
     <v-card-title>
-      Create New Board
+      Edit Board
     </v-card-title>
     <v-card-text>
-      <v-form @submit.prevent="createBoard">
+      <v-form @submit.prevent="updateBoard">
         <v-text-field
           v-model="board.name"
           label="Borad Name"
@@ -62,7 +62,7 @@
             class="white--text"
             depressed
             large
-          >Add</v-btn>
+          >Update</v-btn>
         </v-card-actions>
       </v-form>
     </v-card-text>
@@ -71,15 +71,12 @@
 
 <script>
 export default {
-  name: 'BoardForm',
+  name: 'BoardEdit',
   data() {
     return {
-      backgroundColor: 'indigo',
+      backgroundColor: this.editBoard.background,
       backgroundImage: '',
-      board: {
-        name: '',
-        background: '',
-      },
+      board: this.editBoard,
       colors: [
         'red',
         'pink',
@@ -93,24 +90,27 @@ export default {
       ],
     };
   },
+  props: {
+    editBoard: {
+      type: Object,
+      required: true,
+    },
+  },
   computed: {
     isValid() {
       return !!this.board.name;
     },
   },
   methods: {
-    createBoard() {
+    updateBoard() {
       if (this.isValid) {
         this.board.background = (this.backgroundImage.length !== 0)
           ? this.backgroundImage
           : this.backgroundColor;
 
-        const { Board } = this.$FeathersVuex.api;
-        const board = new Board(this.board);
-        board.save()
+        this.board.save()
           .then(() => {
-            this.$emit('create');
-            this.clearForm();
+            this.$emit('update');
           })
           .catch((error) => {
             console.error(error);
@@ -119,14 +119,6 @@ export default {
     },
     selectColor(color) {
       this.backgroundColor = color;
-    },
-    clearForm() {
-      this.backgroundColor = 'indigo';
-      this.backgroundImage = '';
-      this.board = {
-        name: '',
-        background: '',
-      };
     },
   },
 };
