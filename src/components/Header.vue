@@ -23,7 +23,7 @@
           </v-btn>
         </template>
         <v-list width="150" elevation="20" class="mt-2">
-          <v-list-item link>
+          <v-list-item link :to="{name: 'UserEdit'}">
             <v-list-item-content>
               <v-list-item-title>Profile</v-list-item-title>
             </v-list-item-content>
@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import NoAvatar from '@/assets/avatar.png';
+import { mapState, mapGetters, mapActions } from 'vuex';
+import anonymousAvatar from '@/assets/avatar.png';
 
 export default {
   name: 'Boards',
@@ -58,12 +58,18 @@ export default {
     },
   },
   computed: {
-    ...mapGetters('auth', ['user']),
+    ...mapState('users', ['isGetPending']),
+    ...mapGetters('auth', { authUser: 'user' }),
+    ...mapGetters('users', { getUserInStore: 'get' }),
+    user() {
+      return this.getUserInStore(this.authUser._id);
+    },
     userImage() {
-      return this.user.imageUrl || NoAvatar;
+      return this.user.imageUrl || anonymousAvatar;
     },
   },
   methods: {
+    ...mapActions('users', { getUser: 'get' }),
     ...mapActions('auth', { authLogout: 'logout' }),
     logout() {
       this.authLogout()

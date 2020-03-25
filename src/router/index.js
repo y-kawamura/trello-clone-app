@@ -61,6 +61,14 @@ const routes = [
       checkLogin(next);
     },
   },
+  {
+    path: '/userEdit',
+    name: 'UserEdit',
+    component: () => import('../views/UserEdit.vue'),
+    beforeEnter(to, from, next) {
+      checkLogin(next);
+    },
+  },
 ];
 
 const router = new VueRouter({
