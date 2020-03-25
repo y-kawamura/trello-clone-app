@@ -85,8 +85,8 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['authenticate']),
-    signUp() {
-      this.$refs.form.validate();
+    async signUp() {
+      await this.$refs.form.validate();
 
       if (this.valid) {
         // sign up
