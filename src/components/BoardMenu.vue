@@ -9,11 +9,21 @@
     >
       <v-list-item :ripple="false" @click="$emit('hide')">
         <v-list-item-content :class="textColor('darken-4')">
-          Board Menu
+          <v-row justify="space-between" align="center" class="mx-3">
+            Board Menu
+            <v-icon :class="textColor('darken-4')">mdi-chevron-double-right</v-icon>
+          </v-row>
         </v-list-item-content>
       </v-list-item>
       <v-divider></v-divider>
-
+      <v-list-item>
+        <v-list-item-content>
+          <div class="d-flex justify-space-between align-center">
+            Backgound
+            <v-card width="50" height="30" :color="bgColor('dark-3')"></v-card>
+          </div>
+        </v-list-item-content>
+      </v-list-item>
       <v-list-item>
         <v-list-item-content>Activity Log</v-list-item-content>
       </v-list-item>

@@ -17,7 +17,7 @@
         :key="activity._id"
       >
         <v-list-item-avatar>
-          <v-img v-if="hasUserImage(activity.userId)" :src=userImage(activity.userId)></v-img>
+          <v-img v-if="userImage(activity.userId)" :src=userImage(activity.userId)></v-img>
           <v-icon v-else>mdi-account</v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
@@ -56,9 +56,6 @@ export default {
     completeLog() {
       return (activity) => `${this.userById(activity.userId).displayName} さんが ${activity.text}`;
     },
-    hasUserImage() {
-      return (userId) => !!this.userById(userId).imageUrl;
-    },
     userImage() {
       return (userId) => this.userById(userId).imageUrl;
     },
@@ -76,21 +73,18 @@ export default {
   },
   methods: {
     ...mapActions('activities', { findActivities: 'find' }),
-    ...mapActions('users', { getUser: 'get' }),
   },
   created() {
     this.findActivities({
       query: this.querySortLatestLogOnBoard,
     });
-
-    this.getUser(this.board.ownerId);
   },
 };
 </script>
 
 <style scoped>
 .v-list {
-  max-height: 85%;
+  max-height: 65%;
   overflow-y: scroll;
 }
 .log-text {
