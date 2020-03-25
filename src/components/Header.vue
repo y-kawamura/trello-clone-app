@@ -6,7 +6,7 @@
       >Trello Clone</router-link>
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-toolbar-items>
+    <v-toolbar-items v-if="currentUser">
       <v-menu offset-y transition="slide-x-reverse-transition">
         <template v-slot:activator="{on}">
           <v-btn v-on="on" text :ripple="false" :hover="false" class="text-none pa-0">
@@ -17,7 +17,7 @@
               >
             </v-avatar>
             <span class="font-weight-light">
-              {{ user.displayName }}
+              {{ currentUser.displayName }}
             </span>
             <v-icon>mdi-menu-down</v-icon>
           </v-btn>
@@ -58,28 +58,36 @@ export default {
     },
   },
   computed: {
-    ...mapState('users', ['isGetPending']),
-    ...mapGetters('auth', { authUser: 'user' }),
-    ...mapGetters('users', { getUserInStore: 'get' }),
-    user() {
-      return this.getUserInStore(this.authUser._id);
-    },
+    ...mapState(['currentUser']),
+    ...mapGetters('auth', ['user']),
     userImage() {
-      return this.user.imageUrl || anonymousAvatar;
+      return this.currentUser.imageUrl || anonymousAvatar;
     },
   },
   methods: {
-    ...mapActions('users', { getUser: 'get' }),
+    ...mapActions(['setCurrentUser']),
     ...mapActions('auth', { authLogout: 'logout' }),
     logout() {
       this.authLogout()
         .then(() => {
+          this.setCurrentUser(null);
           this.$router.push('/login');
         })
         .catch((error) => {
           console.error(error);
         });
     },
+  },
+  created() {
+    if (!this.currentUser) {
+      const user = {
+        _id: this.user._id,
+        username: this.user.username,
+        displayName: this.user.displayName,
+        imageUrl: this.user.imageUrl,
+      };
+      this.setCurrentUser(user);
+    }
   },
 };
 </script>

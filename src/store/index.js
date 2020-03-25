@@ -20,9 +20,19 @@ const servicePlugins = requireModule
   .map((modulePath) => requireModule(modulePath).default);
 
 export default new Vuex.Store({
-  state: {},
-  mutations: {},
-  actions: {},
+  state: {
+    currentUser: null,
+  },
+  mutations: {
+    setCurrentUser(state, user) {
+      state.currentUser = user;
+    },
+  },
+  actions: {
+    setCurrentUser({ commit }, user) {
+      commit('setCurrentUser', user);
+    },
+  },
   modules: {
     board,
   },

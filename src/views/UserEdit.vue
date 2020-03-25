@@ -2,7 +2,7 @@
   <v-app>
     <Header />
 
-    <v-content>
+    <v-content v-if="currentUser">
       <v-container fluid py-0>
         <v-snackbar
           v-model="updatedNotify"
@@ -23,10 +23,10 @@
             >
           </v-avatar>
           <span class="display-1 ml-2">
-            {{ user.displayName }}
+            {{ currentUser.displayName }}
           </span>
           <span class="headline ml-2 font-italic font-weight-light">
-            @{{ user.username}}
+            @{{ currentUser.username}}
           </span>
         </v-row>
         <v-row>
@@ -38,14 +38,14 @@
               lazy-validation
             >
               <v-text-field
-                v-model="user.displayName"
+                v-model="currentUser.displayName"
                 :rules="emptyRules"
                 label="Display Name"
                 color="indigo darken-1"
                 required
               ></v-text-field>
               <v-text-field
-                v-model="user.imageUrl"
+                v-model="currentUser.imageUrl"
                 label="User Image"
                 color="indigo darken-1"
               ></v-text-field>
@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import Header from '@/components/Header.vue';
 import anonymousAvatar from '@/assets/avatar.png';
 
@@ -87,19 +87,17 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('auth', ['user']),
+    ...mapState(['currentUser']),
     userImage() {
-      return this.user.imageUrl || anonymousAvatar;
+      return this.currentUser.imageUrl || anonymousAvatar;
     },
   },
   methods: {
+    ...mapActions(['setCurrentUser']),
     ...mapActions('users', { updateUser: 'patch' }),
     async update() {
-      const data = {
-        displayName: this.user.displayName,
-        imageUrl: this.user.imageUrl,
-      };
-      await this.updateUser([this.user._id, data, {}]);
+      await this.updateUser([this.currentUser._id, this.currentUser, {}]);
+      this.setCurrentUser(this.currentUser);
       this.updatedNotify = true;
     },
   },
