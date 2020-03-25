@@ -5,10 +5,16 @@
         <h1 class="display-1 font-weight-thin my-2">Login</h1>
       </v-card-title>
       <v-card-text>
+        <v-alert v-if="errors" type="error">
+          {{ errors }}
+        </v-alert>
+      </v-card-text>
+      <v-card-text>
         <v-form
           v-model="valid"
           ref="form"
           lazy-validation
+        @submit.prevent="login"
         >
           <v-text-field
             v-model="user.username"
@@ -27,10 +33,10 @@
           ></v-text-field>
 
           <v-btn
+            type="submit"
             class="my-4"
             color="indigo darken-1"
             dark
-            @click="login"
           >
             Login
           </v-btn>
@@ -47,6 +53,7 @@ export default {
   name: 'Login',
   data() {
     return {
+      errors: '',
       valid: true,
       user: {
         username: '',
@@ -59,8 +66,8 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['authenticate']),
-    login() {
-      this.$refs.form.validate();
+    async login() {
+      await this.$refs.form.validate();
       if (this.valid) {
         // login
         this.authenticate({
@@ -68,9 +75,11 @@ export default {
           ...this.user,
         })
           .then(() => {
+            this.errors = '';
             this.$router.push('/boards');
           })
           .catch((error) => {
+            this.errors = 'Username or Password is invaid!';
             console.log(error);
           });
       }
