@@ -10,12 +10,28 @@
       ></BoardMenu>
 
       <v-container fluid ma-0 pa-0>
+
+        <!-- Investigation Form -->
+        <v-dialog v-if="isShowInvestigation" v-model="isShowInvestigation" width="400">
+          <InvestigateForm
+            @cancel="isShowInvestigation = false"
+            @update="isShowInvestigation = false"
+          />
+        </v-dialog>
+
         <!-- header area -->
         <v-row class="mx-3 mt-3 mb-2">
           <h1
             class="headline font-weight-bold"
             :class="textColor('lighten-5')"
           >{{ board.name }}</h1>
+          <MemberList />
+          <v-btn
+            :color="bgColor('lighten-3')"
+            :class="textColor('darken-3')"
+            class="ml-2"
+            @click="isShowInvestigation=true"
+          >Investigation</v-btn>
           <v-spacer></v-spacer>
           <v-btn
             :color="bgColor('lighten-3')"
@@ -71,11 +87,14 @@ import Header from '@/components/Header.vue';
 import ListItem from '@/components/ListItem.vue';
 import ListForm from '@/components/ListForm.vue';
 import BoardMenu from '@/components/BoardMenu.vue';
+import InvestigateForm from '@/components/InvestigateForm.vue';
+import MemberList from '@/components/MemberList.vue';
 
 export default {
   name: 'Board',
   data() {
     return {
+      isShowInvestigation: false,
       showBoardMenu: false,
       showListForm: false,
       isLoading: false,
@@ -86,6 +105,8 @@ export default {
     ListItem,
     ListForm,
     BoardMenu,
+    InvestigateForm,
+    MemberList,
   },
   computed: {
     ...mapState('boards', { getBoardLoading: 'isGetPending' }),
