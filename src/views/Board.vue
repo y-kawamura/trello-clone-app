@@ -2,7 +2,7 @@
   <v-app v-if="!isLoading">
     <Header :color="bgColor('darken-3')" />
 
-    <v-content :class="bgColor('darken-2')">
+    <v-content :style="bgStyle" :class="bgColor('darken-2')">
       <!-- fixed side menu -->
       <BoardMenu
         :show="showBoardMenu"
@@ -97,6 +97,13 @@ export default {
       return this.findListsInStore({
         query: { boardId: this.board._id },
       }).data;
+    },
+    bgStyle() {
+      return `
+        background-image: url(${this.board.backgroundImage});
+        background-size: cover;
+        background-position: center;
+      `;
     },
   },
   methods: {

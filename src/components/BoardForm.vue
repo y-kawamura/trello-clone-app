@@ -23,9 +23,9 @@
               flat
               width="100"
               height="100"
-              :color="backgroundColor"
+              :color="board.backgroundColor"
               class="color-board"
-              :img="backgroundImage"
+              :img="board.backgroundImage"
             ></v-card>
           </v-col>
           <v-col cols="6" sm="8">
@@ -42,7 +42,7 @@
           </v-col>
         </v-row>
         <v-text-field
-          v-model="backgroundImage"
+          v-model="board.backgroundImage"
           label="Image URL"
           color="indigo"
         ></v-text-field>
@@ -74,11 +74,10 @@ export default {
   name: 'BoardForm',
   data() {
     return {
-      backgroundColor: 'indigo',
-      backgroundImage: '',
       board: {
         name: '',
-        background: '',
+        backgroundColor: 'indigo',
+        backgroundImage: '',
       },
       colors: [
         'red',
@@ -95,16 +94,12 @@ export default {
   },
   computed: {
     isValid() {
-      return !!this.board.name;
+      return (this.board.name && this.board.backgroundColor);
     },
   },
   methods: {
     createBoard() {
       if (this.isValid) {
-        this.board.background = (this.backgroundImage.length !== 0)
-          ? this.backgroundImage
-          : this.backgroundColor;
-
         const { Board } = this.$FeathersVuex.api;
         const board = new Board(this.board);
         board.save()
@@ -118,14 +113,13 @@ export default {
       }
     },
     selectColor(color) {
-      this.backgroundColor = color;
+      this.board.backgroundColor = color;
     },
     clearForm() {
-      this.backgroundColor = 'indigo';
-      this.backgroundImage = '';
       this.board = {
         name: '',
-        background: '',
+        backgroundColor: 'indigo',
+        backgroundImage: '',
       };
     },
   },

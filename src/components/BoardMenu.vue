@@ -20,7 +20,12 @@
         <v-list-item-content>
           <div class="d-flex justify-space-between align-center">
             Backgound
-            <v-card width="50" height="30" :color="bgColor('dark-3')"></v-card>
+            <v-card
+              width="80"
+              height="50"
+              :img="board.backgroundImage"
+              :color="bgColor('darken-2')"
+            ></v-card>
           </div>
         </v-list-item-content>
       </v-list-item>
@@ -33,7 +38,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import ActivityLogList from '@/components/ActivityLogList.vue';
 
 export default {
@@ -48,6 +53,7 @@ export default {
     },
   },
   computed: {
+    ...mapState('board', ['board']),
     ...mapGetters('board', ['bgColor', 'textColor']),
   },
 };

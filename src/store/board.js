@@ -7,8 +7,14 @@ const state = {
 };
 
 const getters = {
-  bgColor: (state) => (type) => (type ? `${state.board.background} ${type}` : `${state.board.background}`),
-  textColor: (state) => (type) => (type ? `${state.board.background}--text text--${type}` : `${state.board.background}--text`),
+  bgColor: (state) => (type) => {
+    const color = state.board.backgroundImage ? 'blue-grey' : state.board.backgroundColor;
+    return type ? `${color} ${type}` : `${color}`;
+  },
+  textColor: (state) => (type) => {
+    const color = state.board.backgroundImage ? 'blue-grey' : state.board.backgroundColor;
+    return type ? `${color}--text text--${type}` : `${color}--text`;
+  },
 };
 
 const mutations = {

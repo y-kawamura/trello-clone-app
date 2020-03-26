@@ -13,7 +13,8 @@ class Board extends BaseModel {
   static instanceDefaults() {
     return {
       name: '',
-      background: '',
+      backgroundColor: '',
+      backgroundImage: '',
     };
   }
 }

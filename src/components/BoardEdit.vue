@@ -23,9 +23,9 @@
               flat
               width="100"
               height="100"
-              :color="backgroundColor"
+              :color="board.backgroundColor"
               class="color-board"
-              :img="backgroundImage"
+              :img="board.backgroundImage"
             ></v-card>
           </v-col>
           <v-col cols="6" sm="8">
@@ -42,7 +42,7 @@
           </v-col>
         </v-row>
         <v-text-field
-          v-model="backgroundImage"
+          v-model="board.backgroundImage"
           label="Image URL"
           color="indigo"
         ></v-text-field>
@@ -74,9 +74,11 @@ export default {
   name: 'BoardEdit',
   data() {
     return {
-      backgroundColor: this.editBoard.background,
-      backgroundImage: '',
-      board: this.editBoard,
+      board: {
+        name: this.editBoard.name,
+        backgroundColor: this.editBoard.backgroundColor,
+        backgroundImage: this.editBoard.backgroundImage,
+      },
       colors: [
         'red',
         'pink',
@@ -98,17 +100,16 @@ export default {
   },
   computed: {
     isValid() {
-      return !!this.board.name;
+      return (this.board.name && this.board.backgroundColor);
     },
   },
   methods: {
     updateBoard() {
       if (this.isValid) {
-        this.board.background = (this.backgroundImage.length !== 0)
-          ? this.backgroundImage
-          : this.backgroundColor;
-
-        this.board.save()
+        this.editBoard.name = this.board.name;
+        this.editBoard.backgroundColor = this.board.backgroundColor;
+        this.editBoard.backgroundImage = this.board.backgroundImage;
+        this.editBoard.save()
           .then(() => {
             this.$emit('update');
           })
@@ -118,7 +119,7 @@ export default {
       }
     },
     selectColor(color) {
-      this.backgroundColor = color;
+      this.board.backgroundColor = color;
     },
   },
 };

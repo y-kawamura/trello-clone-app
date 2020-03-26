@@ -23,7 +23,8 @@
               :to="{ name: 'Board', params: { board_id: board._id } }"
               hover
               dark
-              :color="board.background"
+              :img="board.backgroundImage"
+              :color="board.backgroundColor"
             >
               <v-card-title>
                 {{ board.name }}
