@@ -25,20 +25,27 @@
             class="headline font-weight-bold"
             :class="textColor('lighten-5')"
           >{{ board.name }}</h1>
-          <MemberList />
+          <MemberList class="mx-3" />
           <v-btn
+            v-if="isBoardOwner(board)"
             :color="bgColor('lighten-3')"
             :class="textColor('darken-3')"
             class="ml-2"
             @click="isShowInvestigation=true"
-          >Investigation</v-btn>
+          >
+            <v-icon class="d-flex d-sm-none">mdi-account-plus</v-icon>
+            <span class="d-none d-sm-flex">Add Member</span>
+          </v-btn>
           <v-spacer></v-spacer>
           <v-btn
             :color="bgColor('lighten-3')"
             :class="textColor('darken-3')"
             @click="showBoardMenu=true"
             :ripple="false"
-          >Board Menu</v-btn>
+          >
+            <v-icon class="d-flex d-sm-none">mdi-menu</v-icon>
+            <span class="d-none d-sm-flex">Board Menu</span>
+          </v-btn>
         </v-row>
 
         <!-- main content -->
@@ -114,10 +121,14 @@ export default {
     ...mapState('board', ['board']),
     ...mapGetters('lists', { findListsInStore: 'find' }),
     ...mapGetters('board', ['bgColor', 'textColor']),
+    ...mapGetters('auth', ['user']),
     lists() {
       return this.findListsInStore({
         query: { boardId: this.board._id },
       }).data;
+    },
+    isBoardOwner() {
+      return (board) => board.ownerId === this.user._id;
     },
     bgStyle() {
       return `

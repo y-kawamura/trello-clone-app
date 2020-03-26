@@ -25,11 +25,12 @@
               dark
               :img="board.backgroundImage"
               :color="board.backgroundColor"
+              height="120"
             >
               <v-card-title>
                 {{ board.name }}
               </v-card-title>
-              <v-card-actions class="mb-2">
+              <v-card-actions v-if="isBoardOwner(board)" class="mb-2">
                 <v-spacer></v-spacer>
                 <v-btn icon @click.prevent="showBoardEdit(board)">
                   <v-icon>mdi-square-edit-outline</v-icon>
@@ -55,6 +56,7 @@
                   link
                   hover
                   height="115px"
+                  color="grey lighten-3"
                 >
                   <v-row justify="center" style="height:100%;">
                     <v-card-title class="grey--text text--lighten-1">
@@ -104,9 +106,15 @@ export default {
     boards() {
       return this.findBoardsInStore({
         query: {
-          ownerId: this.user._id,
+          $or: [
+            { ownerId: this.user._id },
+            { members: this.user._id },
+          ],
         },
       }).data;
+    },
+    isBoardOwner() {
+      return (board) => board.ownerId === this.user._id;
     },
   },
   methods: {
@@ -117,11 +125,7 @@ export default {
     },
   },
   created() {
-    this.findBoards({
-      query: {
-        ownerId: this.user._id,
-      },
-    });
+    this.findBoards({});
   },
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
-  <div v-if="!isFindPending">
-    <v-avatar color="white" size="32" class="mx-2">
+  <div>
+    <v-avatar color="white" size="32" class="mx-1">
       <img
         :src="userImage(owner)"
         :alt="owner.displayName"
