@@ -1,24 +1,27 @@
-# client
+# Trello clone app
 
-## Project setup
-```
-npm install
-```
+### [Demo](https://penta-trello-clone.now.sh/)
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+### server side (https://github.com/y-kawamura/trello-clone-api)
+* Feathers
+* mongoose
 
-### Compiles and minifies for production
-```
-npm run build
-```
+### client side
+* Vue.js
+* VueRouter
+* FearthersVuex
+* Vuetify
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Feature
+* signup
+* login/logout
+* authentication JWT
+* authorization
+* Real time communication
+* Create Board
+* Selectable a board backgound color / image
+* Create List
+* Create Card
+* Move a card to another list (drag and drop)
+* Activity Log
+* Invitation other users as board member
